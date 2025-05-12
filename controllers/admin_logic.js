@@ -18,6 +18,7 @@ app.use(express.json());
 
 
 module.exports.admin_register=async (req,res)=>{
+    res.render("registration")
     try{
         
     const {name,email,password}=req.body;
@@ -47,6 +48,7 @@ module.exports.admin_register=async (req,res)=>{
    
 }
 module.exports.admin_login=async (req,res)=>{
+    res.renser("login")
     try{
     const {email,password}=req.body;
     if(!email || !password){

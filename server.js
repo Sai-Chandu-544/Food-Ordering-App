@@ -5,13 +5,15 @@ const port=process.env.PORT || 5000
 const Database=require("./config/mongoose_connection.js");
 const user_router=require("./routes/user_router.js")
 const admin_router=require("./routes/admin_router.js")
+const cors=require("cors")
+app.use(cors())
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 const cookieparser = require("cookie-parser");
 app.use(cookieparser());
-
+ 
 
 
 
