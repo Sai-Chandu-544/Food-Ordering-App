@@ -13,6 +13,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      overflow: hidden; /* Prevent scrollbars */
     }
 
     .registration-form {
@@ -20,7 +21,8 @@
       padding: 20px 30px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      width: 300px;
+      width: 100%;
+      max-width: 400px; /* Limit the maximum width of the form */
     }
 
     .registration-form h2 {
