@@ -52,6 +52,7 @@ module.exports.admin_register=async (req,res)=>{
 module.exports.admin_login=async (req,res)=>{
    
     try{
+        res.render("login")
     const {email,password}=req.body;
     if(!email || !password){
         return res.send("Feild is Required")
