@@ -9,6 +9,7 @@ const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 const user_registration_model = require("../models/user_registration.js");
 
+
 app.use(express.json());
 
 
@@ -18,7 +19,7 @@ app.use(express.json());
 
 
 module.exports.admin_register=async (req,res)=>{
-    res.render("registration")
+    
     try{
         
     const {name,email,password}=req.body;
@@ -48,7 +49,7 @@ module.exports.admin_register=async (req,res)=>{
    
 }
 module.exports.admin_login=async (req,res)=>{
-    res.renser("login")
+   
     try{
     const {email,password}=req.body;
     if(!email || !password){

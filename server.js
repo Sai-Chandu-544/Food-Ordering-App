@@ -7,7 +7,8 @@ const user_router=require("./routes/user_router.js")
 const admin_router=require("./routes/admin_router.js")
 const cors=require("cors")
 app.use(cors())
-
+const ejs=require("ejs")
+app.set("view engine", "ejs");
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
