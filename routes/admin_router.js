@@ -3,12 +3,6 @@ const router=express.Router();
 const middleware=require("./../middleware/middleware.js")
 
 const {admin_register,admin_login,admin_logout,admin_result,admin_update,admin_delete,admin_itemName,admin_itemlist,admin_items,get_users,admin_cusine}=require("./../controllers/admin_logic.js");
-router.get("/register",(req,res)=>{
-    res.render("registration")
-})
-router.get("/login",(req,res)=>{
-    res.render("login")
-})
 
 
 router.post("/register",admin_register)
