@@ -21,6 +21,7 @@ app.use(express.json());
 module.exports.admin_register=async (req,res)=>{
     
     try{
+         res.render("registration")
         
     const {name,email,password}=req.body;
     if(!name || !email || !password){
