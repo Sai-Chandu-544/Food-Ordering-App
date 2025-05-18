@@ -73,9 +73,10 @@ module.exports.login=async (req,res)=>{
         // console.log("SECRET_KEY:",process.env.SECRET_KEY)
         // console.log("token:",token)
         
-        res.cookie("token",token)
+        // res.cookie("token",token)
         console.log("Login Successfull")
         res.send("Your Login Successfull")
+        res.json({token})
 
       }
       else{
