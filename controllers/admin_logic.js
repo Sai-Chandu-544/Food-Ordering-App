@@ -21,6 +21,7 @@ app.use(express.json());
 module.exports.admin_register=async (req,res)=>{
     
     try{
+         
         
     const {name,email,password}=req.body;
     if(!name){
@@ -56,6 +57,7 @@ module.exports.admin_register=async (req,res)=>{
 module.exports.admin_login=async (req,res)=>{
    
     try{
+       
     const {email,password}=req.body;
     if(!email || !password){
         return res.send("Feild is Required")
