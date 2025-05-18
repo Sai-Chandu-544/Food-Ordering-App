@@ -14,17 +14,17 @@ app.use(express.json())
 
 const middleware=(req,res,next)=>{
     try{
-        
-        // console.log("All Headers: ", req.headers);
-
-     const token = req.cookies.token;
-// console.log("Token from cookie:", token); 
+    //    console.log("Headers",req.headers)
+    const authHeader=req.headers.authorization
+    const token = authHeader.split(" ")[1];
+    // console.log(token)
+  
+ 
 
 if (!token) {
   return res.status(401).send("Login First!");
 }
     
-   
         
             const check=jwt.verify(token,process.env.SECRET_KEY)
             // console.log(check)

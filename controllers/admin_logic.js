@@ -23,8 +23,13 @@ module.exports.admin_register=async (req,res)=>{
     try{
         
     const {name,email,password}=req.body;
-    if(!name || !email || !password){
-        return res.send("Field is Required")
+    if(!name){
+        return res.send("name Field is Required")
+    }if(!email){
+        return res.send("email Field is Required")
+    }
+    if(!password){
+        return res.send("password Field is Required")
     }
     const admin= await admin_model.findOne({email:email})
     if(admin){
@@ -38,7 +43,7 @@ module.exports.admin_register=async (req,res)=>{
         password:gen_hash
     })
     const admin_saved= await admin_info.save();
-    console.log(admin_saved)
+    // console.log(admin_saved)
     res.status(200).send("Data Saved")
 
     }catch(err){
@@ -62,15 +67,17 @@ module.exports.admin_login=async (req,res)=>{
        const result= await bcrypt.compare(password,admin.password)
        if(result){
         const token=jwt.sign({email:admin.email},process.env.SECRET_KEY,{expiresIn:"1h"})
-        // console.log(token)
-        // res.setHeader('Authorization', token);
-      res.cookie('token', token,)
+    
+
+      console.log("Login Successfull")
+        res.json({ token }); // Send token in response body to client and then client set in localstorage.
+    
   
-res.send("Login successful");
+       
 
 
-        console.log("Login Successfull")
-        // res.send("Your Login Successfull")
+      
+    
 
       }
     }catch(err){
@@ -229,7 +236,7 @@ module.exports.admin_itemlist=async (req,res)=>{
     try{
         const result= await data.find();
             console.log("Data Fetched Successfully")
-            console.log(result)
+            // console.log(result)
             return  res.status(200).send(result)
 
         }

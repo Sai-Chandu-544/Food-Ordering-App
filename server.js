@@ -14,9 +14,10 @@ app.use(bodyParser.json());
 
 const cookieparser = require("cookie-parser");
 app.use(cookieparser());
+
  
 
-
+app.use(express.urlencoded({ extended: true }));
 
 Database();
 
