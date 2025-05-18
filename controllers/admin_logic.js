@@ -70,7 +70,7 @@ module.exports.admin_login=async (req,res)=>{
     
 
       console.log("Login Successfull")
-        res.json({ token }); // Send token in response body to client and then client set in localstorage.
+        res.json({ token }); // Send token in response body to client and then client set in localstorage and client set according to it
     
   
        

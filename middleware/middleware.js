@@ -14,7 +14,7 @@ app.use(express.json())
 
 const middleware=(req,res,next)=>{
     try{
-    //    console.log("Headers",req.headers)
+    //    console.log("headers",req.headers)
     const authHeader=req.headers.authorization
     const token = authHeader.split(" ")[1];
     // console.log(token)
