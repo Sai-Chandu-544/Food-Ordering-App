@@ -104,12 +104,12 @@ module.exports.admin_result=async (req,res)=>{
 // console.log("Price:", Price);
 // console.log("Category:", Category);
              //Recipe_Id and Price is a number, you should not use a simple truthy check, as 0 would be considered falsy. Instead, you should explicitly check for undefined.
-            return res.send("Field is Required")
+            return res.json({message:"Field is Required"})
         }
         const product= await data.findOne({Recipe_ID:Recipe_ID})
         if(product){
             console.log("Recipe_id should not be Duplicate")
-            return res.send("Recipe_id should not be Duplicate")
+            return res.status(500).json({message:"Recipe_id should not be Duplicate"})
         }
         const details= new data({
             Recipe_ID,
@@ -124,7 +124,7 @@ module.exports.admin_result=async (req,res)=>{
         })
         const data_saved= await details.save();
         // console.log(data_saved)
-        res.status(200).send("Product Added Successfully")
+        res.status(200).json({message:"Product Added Successfully"})
    
 
     }catch (error) {
