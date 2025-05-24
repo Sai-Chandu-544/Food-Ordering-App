@@ -63,11 +63,11 @@ module.exports.admin_login=async (req,res)=>{
        
     const {email,password}=req.body;
     if(!email || !password){
-        return res.send("Feild is Required")
+        return res.json({message:"Feild is Required"})
     }
     const admin=await admin_model.findOne({email:email})
         if(!admin){
-            return res.send("Please Register!")
+            return res.json({message:"Please Register!"})
         }
        const result= await bcrypt.compare(password,admin.password)
        if(result){
@@ -76,18 +76,11 @@ module.exports.admin_login=async (req,res)=>{
 
       console.log("Login Successfull")
         res.json({ token }); // Send token in response body to client and then client set in localstorage and client set according to it
-    
-  
-       
-
-
-      
-    
 
       }
     }catch(err){
         console.log("Login Error",err)
-        res.status(400).send("Login Failed!")
+        res.status(400).json({message:"Login Failed!"})
     }
 }
 module.exports.admin_logout=(req,res,next)=>{
