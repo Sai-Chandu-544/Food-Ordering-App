@@ -24,18 +24,20 @@ module.exports.admin_register=async (req,res)=>{
          
         
     const {name,email,password}=req.body;
-    if(!name){
-        return res.send("name Field is Required")
-    }if(!email){
-        return res.send("email Field is Required")
-    }
-    if(!password){
-        return res.send("password Field is Required")
-    }
+   if (!name) {
+  return res.status(400).json({ message: "Name field is required" });
+}
+if (!email) {
+  return res.status(400).json({ message: "Email field is required" });
+}
+if (!password) {
+  return res.status(400).json({ message: "Password field is required" });
+}
+
     const admin= await admin_model.findOne({email:email})
-    if(admin){
-        return res.send("Admin already registered")
-    }
+   if (admin) {
+  return res.status(409).json({ message: "Admin already registered" });
+   }
      const gen_salt=await bcrypt.genSalt(10)
      const gen_hash= await bcrypt.hash(password,gen_salt)
      const admin_info=  new admin_model({
@@ -45,7 +47,8 @@ module.exports.admin_register=async (req,res)=>{
     })
     const admin_saved= await admin_info.save();
     // console.log(admin_saved)
-    res.status(200).send("Data Saved")
+   res.status(200).json({ message: "Admin Registered Successfully" });
+
 
     }catch(err){
         console.error("Admin Registration Error:", err);
