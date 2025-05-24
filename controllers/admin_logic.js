@@ -124,7 +124,7 @@ module.exports.admin_result=async (req,res)=>{
         })
         const data_saved= await details.save();
         // console.log(data_saved)
-        res.status(200).json({message:"Product Added Successfully"})
+        res.status(200).json({message:"Product Added Successfully",Data:data_saved})
    
 
     }catch (error) {
