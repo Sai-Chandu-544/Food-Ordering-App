@@ -93,7 +93,7 @@ module.exports.admin_logout=(req,res,next)=>{
 module.exports.admin_result=async (req,res)=>{
     try{
         const {Recipe_Id,Title,Description,Cuisine_Type,Image_Url,Discount,Price, Category}=req.body;
-        if(Recipe_ID===undefined || Price===undefined|| !Title || !Description || !Cuisine_Type ||!Image_Url||!Discount || !Category){ 
+        if(Recipe_Id===undefined || Price===undefined|| !Title || !Description || !Cuisine_Type ||!Image_Url||!Discount || !Category){ 
 //             console.log("Request body:");
 // console.log("Recipe_ID:", Recipe_ID);
 // console.log("Title:", Title);
