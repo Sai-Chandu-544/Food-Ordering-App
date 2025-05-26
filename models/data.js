@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 const data=new mongoose.Schema({
-    Recipe_ID:{
+    Recipe_Id:{
         type:Number,
         required:true
     },
@@ -15,7 +15,7 @@ const data=new mongoose.Schema({
     Cuisine_Type:{
         type:String,
         required:true,
-        enum:["South Indian","North Indian","Italian","Japanese","American","Chinese",]
+        enum:["South Indian","North Indian","Italian","Japanese","American","Chinese"]
     },
     Image_Url:{
         type:String,
@@ -32,7 +32,7 @@ const data=new mongoose.Schema({
     Category:{
         type:String,
         required:true,
-        enum:["Veg","Non-Veg"]
+        enum:["Veg","Non Veg"]
     }
    
 
