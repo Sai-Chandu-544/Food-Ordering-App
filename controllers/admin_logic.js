@@ -116,7 +116,7 @@ module.exports.admin_result=async (req,res)=>{
             Title,
             Description,
             Cuisine_Type,
-            image_url,
+            Image_Url,
             Discount,
             Price, 
             Category
