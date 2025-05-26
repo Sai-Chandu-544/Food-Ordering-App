@@ -70,12 +70,11 @@ module.exports.login=async (req,res)=>{
        const result= await bcrypt.compare(password,user.password)
        if(result){
         const token=jwt.sign({email:user.email},process.env.SECRET_KEY,{expiresIn:"1h"})
-        // console.log("SECRET_KEY:",process.env.SECRET_KEY)
-        // console.log("token:",token)
+        
         
         // res.cookie("token",token)
         console.log("Login Successfull")
-        res.send("Your Login Successfull")
+        // res.send("Your Login Successfull")
         res.json({token})
 
       }

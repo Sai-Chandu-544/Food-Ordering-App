@@ -17,7 +17,7 @@ const data=new mongoose.Schema({
         required:true,
         enum:["South Indian","North Indian","Italian","Japanese","American","Chinese",]
     },
-    image_url:{
+    Image_Url:{
         type:String,
         required:true
     },
