@@ -92,8 +92,8 @@ module.exports.admin_logout=(req,res,next)=>{
 }
 module.exports.admin_result=async (req,res)=>{
     try{
-        const {Recipe_ID,Title,Description,Cuisine_Type,image_url,Discount,Price, Category}=req.body;
-        if(Recipe_ID===undefined || Price===undefined|| !Title || !Description || !Cuisine_Type ||!image_url||!Discount || !Category){ 
+        const {Recipe_Id,Title,Description,Cuisine_Type,Image_Url,Discount,Price, Category}=req.body;
+        if(Recipe_Id===undefined || Price===undefined|| !Title || !Description || !Cuisine_Type ||!Image_Url||!Discount || !Category){ 
 //             console.log("Request body:");
 // console.log("Recipe_ID:", Recipe_ID);
 // console.log("Title:", Title);
@@ -106,17 +106,17 @@ module.exports.admin_result=async (req,res)=>{
              //Recipe_Id and Price is a number, you should not use a simple truthy check, as 0 would be considered falsy. Instead, you should explicitly check for undefined.
             return res.json({message:"Field is Required"})
         }
-        const product= await data.findOne({Recipe_ID:Recipe_ID})
+        const product= await data.findOne({Recipe_ID:Recipe_Id})
         if(product){
             console.log("Recipe_id should not be Duplicate")
             return res.status(500).json({message:"Recipe_id should not be Duplicate"})
         }
         const details= new data({
-            Recipe_ID,
+            Recipe_Id,
             Title,
             Description,
             Cuisine_Type,
-            image_url,
+            Image_Url,
             Discount,
             Price, 
             Category
@@ -272,7 +272,7 @@ module.exports.get_users=async (req,res)=>{
     try{
         const user_details= await user_registration_model.find();
         console.log("Users Fetched Successfully")
-        res.status(200).send(user_details)
+        res.status(200).json({user_details})
 
     }catch(err){
         res.status(400).send(err)
