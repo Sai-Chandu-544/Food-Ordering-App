@@ -272,7 +272,7 @@ module.exports.get_users=async (req,res)=>{
     try{
         const user_details= await user_registration_model.find();
         console.log("Users Fetched Successfully")
-        res.status(200).send(user_details)
+        res.status(200).json({user_details})
 
     }catch(err){
         res.status(400).send(err)
