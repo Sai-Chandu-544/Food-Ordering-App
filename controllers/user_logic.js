@@ -14,11 +14,11 @@ module.exports.register=async (req,res)=>{
     try{
         const {name,email,password}=req.body;
         if(!name|| !email || !password){
-            return res.send("Feild is Required")
+            return res.json({message:"Feild is Required"})
         }else{
         let user=await user_registration_model.findOne({email:email})
         if(user){
-            res.send("User Already Registered!")
+            res.json({message:"User Already Registered!"})
         }else{
         
         bcrypt.genSalt(20,(err,salt)=>{
@@ -39,7 +39,7 @@ module.exports.register=async (req,res)=>{
             })
             create_user.save();
             // console.log(create_user)
-            res.status(200).send("User Registered Successfully")
+            res.status(200).json({message:"User Registered Successfully"})
         
         })
             
@@ -49,7 +49,7 @@ module.exports.register=async (req,res)=>{
 
     }}catch(err){
         console.log("User Registration Error",err)
-        res.status(500).send("User Registration Error",err)
+        res.status(500).json({message:"User Registration Error",err})
 
 
     }
@@ -60,12 +60,12 @@ module.exports.login=async (req,res)=>{
     try{
         const {email,password}=req.body;
         if(!email || !password){
-            return res.send("Feild is Required")
+            return res.json({message:"Feild is Required"})
         }
         
         const user=await user_registration_model.findOne({email:email})
         if(!user){
-            return res.send("Please Register!")
+            return res.json({message:"Please Register!"})
         }
        const result= await bcrypt.compare(password,user.password)
        if(result){
@@ -79,7 +79,7 @@ module.exports.login=async (req,res)=>{
 
       }
       else{
-        res.send("something went wrong!")
+        res.json({message:"something went wrong!"})
       }
           
           
@@ -109,13 +109,13 @@ module.exports.user_menu=async (req,res)=>{
     try{
         const result= await data.find(); 
          // console.log(result)   
-            res.status(200).send(result)
+            res.status(200).json({result})
 
         
 
     }catch(err){
         console.log(err.message)
-        res.status(400).send("Internal Server Error")
+        res.status(400).json({message:"Internal Server Error"})
     }
    
 
@@ -127,7 +127,7 @@ module.exports.user_item=async (req,res)=>{
         // console.log(Title)
         
          const get_details=await data.find({Title:item})
-         res.status(200).send(get_details)
+         res.status(200).json({get_details})
      }catch(err){
          console.log("Get Item Failed!")
          res.status(400).json({err:err.message})
@@ -143,14 +143,14 @@ module.exports.item_category= async (req,res)=>{
         if(item_type==="Veg" || item_type==="Non Veg"){
             const response= await data.find({Category:item_type})
             if(!response){
-                return res.send(`There are no Food Items which match with ${item_type}`)
+                return res.json({message:`There are no Food Items which match with ${item_type}`})
             }
-            return res.status(200).send(response)
+            return res.status(200).json({response})
 
         }
         
     }catch(err){
-        res.status(400).send(err)
+        res.status(400).json({message:err})
     }
 }
 module.exports.user_cusine= async (req,res)=>{
@@ -159,12 +159,12 @@ module.exports.user_cusine= async (req,res)=>{
         // console.log(item_type)   
             const response= await data.find({Cuisine_Type:cusine})
             console.log("Data Fetched Successfully!")
-            res.status(200).send(response) 
+            res.status(200).json({response}) 
 
         }
         
     catch(err){
-        res.status(400).send(err)
+        res.status(400).json({err})
     }
 
 }
