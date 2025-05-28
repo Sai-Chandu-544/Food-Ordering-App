@@ -19,7 +19,7 @@ module.exports.register = async (req, res) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        // Check if user already exists
+        // Check if  the user already exists
         let user = await user_registration_model.findOne({ email: email });
         if (user) {
             return res.status(409).json({ message: "User Already Registered!" });
@@ -38,7 +38,7 @@ module.exports.register = async (req, res) => {
 
         await newUser.save();
 
-        return res.status(201).json({ message: "User Registered Successfully" });
+        return res.status(201).json({ message: 'User Registered Successfully' });
 
     } catch (err) {
         console.error("User Registration Error:", err);
