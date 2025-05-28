@@ -1,6 +1,6 @@
 const mongoose=require("mongoose");
 const data=new mongoose.Schema({
-    Recipe_ID:{
+    Recipe_Id:{
         type:Number,
         required:true
     },
@@ -32,7 +32,7 @@ const data=new mongoose.Schema({
     Category:{
         type:String,
         required:true,
-        enum:["Veg","Non-Veg"]
+        enum:["Veg","Non Veg"]
     }
    
 
