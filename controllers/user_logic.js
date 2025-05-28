@@ -10,50 +10,42 @@ const jwt=require("jsonwebtoken");
 app.use(express.json());
 
 
-module.exports.register=async (req,res)=>{
-    try{
-        const {name,email,password}=req.body;
-        if(!name|| !email || !password){
-            return res.json({message:"Feild is Required"})
-        }else{
-        let user=await user_registration_model.findOne({email:email})
-        if(user){
-            res.json({message:"User Already Registered!"})
-        }else{
-        
-        bcrypt.genSalt(20,(err,salt)=>{
-            // console.log("Salt",salt)
-            if(err){
-                console.log("Salt Generation is Failed!")
-            }
-        bcrypt.hash(password,salt,(err,hash)=>{
-            // console.log("hash",hash)
-            if(err){
-                console.log("Hash Error",err)
+module.exports.register = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
 
-            }
-            let create_user=  new user_registration_model({
-                name,     
-                email,
-                password:hash
-            })
-            create_user.save();
-            // console.log(create_user)
-            res.status(200).json({message:"User Registered Successfully"})
-        
-        })
-            
-        })
+        // Check if fields are provided
+        if (!name || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
+        }
+
+        // Check if user already exists
+        let user = await user_registration_model.findOne({ email: email });
+        if (user) {
+            return res.status(409).json({ message: "User Already Registered!" });
+        }
+
+        // Hash the password
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(password, salt);
+
+        // Create and save user
+        const newUser = new user_registration_model({
+            name,
+            email,
+            password: hash
+        });
+
+        await newUser.save();
+
+        return res.status(201).json({ message: "User Registered Successfully" });
+
+    } catch (err) {
+        console.error("User Registration Error:", err);
+        return res.status(500).json({ message: "User Registration Error", error: err.message });
     }
+};
 
-
-    }}catch(err){
-        console.log("User Registration Error",err)
-        res.status(500).json({message:"User Registration Error",err})
-
-
-    }
-}
 
 module.exports.login=async (req,res)=>{
 
