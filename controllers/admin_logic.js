@@ -5,6 +5,7 @@ const cors=require("cors")
 require("dotenv").config();
 const admin_model=require("../models/admin_model.js")
 const data=require("./../models/data.js");
+const order=require("./../models/ordermodel.js")
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 const user_registration_model = require("../models/user_registration.js");
@@ -278,5 +279,14 @@ module.exports.get_users=async (req,res)=>{
         res.status(400).send(err)
 
     }
+}
+
+module.exports.get_user_orders=async(req, res) => {
+  try {
+    const orders = await order.find().populate('userId', 'name email');
+    res.json(orders);
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching all orders' });
+  }
 }
 // console.log("from logic")

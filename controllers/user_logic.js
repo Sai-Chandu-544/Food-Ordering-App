@@ -4,6 +4,7 @@ const app=express();
 require("dotenv").config();
 const user_registration_model=require("./../models/user_registration.js")
 const data=require("./../models/data.js")
+const order=require("./../models/ordermodel.js")
 const bcrypt=require("bcrypt");
 const jwt=require("jsonwebtoken");
 
@@ -160,5 +161,14 @@ module.exports.user_cusine= async (req,res)=>{
     }
 
 }
-
+module.exports.place_orders=async (req, res) => {
+  const { userId, items, totalAmount } = req.body;
+  try {
+    const newOrder = new order({ userId, items, totalAmount });
+    await newOrder.save();
+    res.json({ message: 'Order placed!' });
+  } catch (err) {
+    res.status(500).json({ error: 'Error placing order' });
+  }
+}
  
