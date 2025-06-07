@@ -67,8 +67,13 @@ module.exports.login=async (req,res)=>{
         
         // res.cookie("token",token)
         console.log("Login Successfull")
-        // res.send("Your Login Successfull")git
-        res.json({token,user})
+        // res.send("Your Login Successfull")
+        // console.log(user)
+        res.json({token,user: {
+      _id: user._id,
+      name: user.name,
+      email: user.email
+    }})
         
 
       }
