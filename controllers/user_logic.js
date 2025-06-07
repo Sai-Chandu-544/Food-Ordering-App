@@ -170,6 +170,7 @@ module.exports.place_orders=async (req, res) => {
    
   } catch (err) {
     res.status(500).json({ error: 'Error placing order' });
+    console.log(err)
   }
 }
  

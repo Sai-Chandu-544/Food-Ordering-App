@@ -25,7 +25,7 @@ router.get("/list/:item_type",middleware,admin_items)
 router.get("/cusine/:cusine",middleware,admin_cusine)
 router.get("/users",middleware,get_users)
 
-router.get('/admin/orders', middleware,get_user_orders)
+router.get('/orders', middleware,get_user_orders)
 
 
 
