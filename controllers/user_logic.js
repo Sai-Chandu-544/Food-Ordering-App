@@ -69,6 +69,7 @@ module.exports.login=async (req,res)=>{
         console.log("Login Successfull")
         // res.send("Your Login Successfull")
         res.json({token})
+        res.json({user})
 
       }
       else{
