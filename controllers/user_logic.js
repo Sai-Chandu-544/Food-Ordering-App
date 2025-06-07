@@ -166,7 +166,8 @@ module.exports.place_orders=async (req, res) => {
   try {
     const newOrder = new order({ userId, items, totalAmount });
     await newOrder.save();
-    res.json({ message: 'Order placed!' });
+    res.json({ message: 'Order placed!', newOrder });
+   
   } catch (err) {
     res.status(500).json({ error: 'Error placing order' });
   }
