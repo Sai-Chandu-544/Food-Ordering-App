@@ -67,9 +67,9 @@ module.exports.login=async (req,res)=>{
         
         // res.cookie("token",token)
         console.log("Login Successfull")
-        // res.send("Your Login Successfull")
-        res.json({token})
-        res.json({user})
+        // res.send("Your Login Successfull")git
+        res.json({token,user})
+        
 
       }
       else{
