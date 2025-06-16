@@ -171,7 +171,6 @@ module.exports.place_orders=async (req, res) => {
   // routes/orders.js
 
 
-router.post("/user/place/orders", async (req, res) => {
   try {
     const { userId, items, totalAmount } = req.body;
 
@@ -195,8 +194,8 @@ router.post("/user/place/orders", async (req, res) => {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
-});
-
-
 }
+
+
+
  
