@@ -11,7 +11,7 @@ router.get("/menu/:item",middleware,user_item)
 router.get("/list/:item_type",middleware,item_category)
 router.get("/cusine/:cusine",middleware,user_cusine)
 router.post("/place/orders",middleware,place_orders)
-router.get("/orders",middleware,get_user_orders)
+router.get("/orders/:userId",middleware,get_user_orders)
 
 
 
