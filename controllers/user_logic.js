@@ -183,7 +183,7 @@ module.exports.place_orders=async (req, res) => {
     if (verifiedTotal !== totalAmount)
       return res.status(400).json({ message: "Invalid total" });
 
-    const newOrder = await Order.create({
+    const newOrder = await order.create({
       userId,
       items,
       totalAmount: verifiedTotal,
