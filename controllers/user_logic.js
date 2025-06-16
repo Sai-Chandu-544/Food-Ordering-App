@@ -189,7 +189,7 @@ module.exports.place_orders=async (req, res) => {
       totalAmount: verifiedTotal,
     });
 
-    res.status(201).json({newOrder});
+    res.status(201).json({message:'success',newOrder});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
