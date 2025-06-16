@@ -169,9 +169,7 @@ module.exports.user_cusine= async (req,res)=>{
 }
 module.exports.place_orders=async (req, res) => {
   // routes/orders.js
-const express = require("express");
-const router = express.Router();
-const Order = require("../models/order");
+
 
 router.post("/user/place/orders", async (req, res) => {
   try {
