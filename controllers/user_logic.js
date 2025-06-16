@@ -197,12 +197,24 @@ module.exports.place_orders=async (req, res) => {
 }
 module.exports.get_user_orders=async(req, res) => {
   try {
-    const orders = await order.find();
+    const {userId}=req.params;
+    const orders = await order.find({userId});
     res.json({message:"success",orders});
   } catch (err) {
     res.status(500).json({ error: 'Error fetching all orders' });
   }
 }
 
+// DELETE /user/orders/:orderId
+module.exports.delete_order= async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    await order.findByIdAndDelete(orderId);
+    res.json({ success: true, message: "Order deleted" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: "Delete failed" });
+  }
+};
 
  
