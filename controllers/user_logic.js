@@ -168,15 +168,37 @@ module.exports.user_cusine= async (req,res)=>{
 
 }
 module.exports.place_orders=async (req, res) => {
-  const { userId, items, totalAmount } = req.body;
+  // routes/orders.js
+const express = require("express");
+const router = express.Router();
+const Order = require("../models/order");
+
+router.post("/user/place/orders", async (req, res) => {
   try {
-    const newOrder = new order({ userId, items, totalAmount });
-    await newOrder.save();
-    res.json({ message: 'Order placed!', newOrder });
-   
+    const { userId, items, totalAmount } = req.body;
+
+    // Optional: recompute to be safe
+    const verifiedTotal = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+
+    if (verifiedTotal !== totalAmount)
+      return res.status(400).json({ message: "Invalid total" });
+
+    const newOrder = await Order.create({
+      userId,
+      items,
+      totalAmount: verifiedTotal,
+    });
+
+    res.status(201).json(newOrder);
   } catch (err) {
-    res.status(500).json({ error: 'Error placing order' });
-    console.log(err)
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
   }
+});
+
+
 }
  
