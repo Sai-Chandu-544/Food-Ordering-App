@@ -195,7 +195,14 @@ module.exports.place_orders=async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 }
-
+module.exports.get_user_orders=async(req, res) => {
+  try {
+    const orders = await order.find();
+    res.json({message:"success",orders});
+  } catch (err) {
+    res.status(500).json({ error: 'Error fetching all orders' });
+  }
+}
 
 
  
