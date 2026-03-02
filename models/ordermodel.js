@@ -12,7 +12,16 @@ const orderSchema = new mongoose.Schema({
   ],
   totalAmount: Number,
   orderDate: { type: Date, default: Date.now },
-  status: { type: String, default: 'Pending' },
+    status: {
+      type: String,
+      default: "Pending",
+    },
+
+    // Razorpay fields
+    razorpayOrderId: String,
+    razorpayPaymentId: String,
+ 
+ 
 });
 
 const order = mongoose.model('Order', orderSchema);
