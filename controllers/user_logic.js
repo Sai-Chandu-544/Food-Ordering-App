@@ -177,6 +177,7 @@ module.exports.place_orders = async (req, res) => {
 
   try {
     const { userId, items, totalAmount } = req.body;
+   
 
     // Optional: recompute to be safe
     const verifiedTotal = items.reduce(
@@ -287,12 +288,12 @@ module.exports.verifyPayment = async (req, res) => {
       razorpay_order_id,
       razorpay_payment_id,
       razorpay_signature,
-      cartItems,
+      items,
       totalAmount,
       userId,
     } = req.body;
 
-    // console.log("Verifying payment with data:", req.body);
+    console.log("Verifying payment with data:", req.body);
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
 
@@ -306,14 +307,18 @@ module.exports.verifyPayment = async (req, res) => {
       return res.status(400).json({ message: "Invalid signature" });
     }
 
-    //  SAVE ORDER IN DB
+     if (!items || items.length === 0) {
+      return res.status(400).json({ message: "No items received" });
+    }
+
     const newOrder = await order.create({
       userId,
-      items: cartItems,
+      items: items,   
       totalAmount,
-      razorpay_order_id,
-      razorpay_payment_id,
       status: "Paid",
+      orderDate: new Date(),
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
     });
 
     res.json({
