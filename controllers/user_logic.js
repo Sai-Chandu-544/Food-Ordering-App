@@ -204,7 +204,8 @@ module.exports.getUserOrders = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    const orders = await order.find({ userId }).sort({ createdAt: -1 });
+    const orders = await order.find({ userId }).sort({ createdAt: -1 })
+        .populate("items._id");
 
     res.json({
       success: true,
