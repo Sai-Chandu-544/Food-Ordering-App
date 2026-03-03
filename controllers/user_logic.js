@@ -172,44 +172,33 @@ module.exports.user_cusine = async (req, res) => {
 
 }
 module.exports.place_orders = async (req, res) => {
+  // routes/orders.js
+
+
   try {
     const { userId, items, totalAmount } = req.body;
 
-    if (!items || items.length === 0) {
-      return res.status(400).json({ message: "No items in order" });
-    }
-
-    // Validate & calculate total safely
-    const orderItems = items.map(item => ({
-      productId: item.productId || item._id,
-      name: item.name,
-      quantity: Number(item.quantity),
-      price: Number(item.price),
-    }));
-
-    const verifiedTotal = orderItems.reduce(
+    // Optional: recompute to be safe
+    const verifiedTotal = items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
 
-    if (verifiedTotal !== Number(totalAmount)) {
-      return res.status(400).json({ message: "Invalid total amount" });
-    }
+    if (verifiedTotal !== totalAmount)
+      return res.status(400).json({ message: "Invalid total" });
+
     const newOrder = await order.create({
       userId,
-      items: orderItems,
+      items,
       totalAmount: verifiedTotal,
-      status: "Paid",
-      orderDate: new Date(),
     });
 
-    res.status(201).json({ message: "success", newOrder });
-
+    res.status(201).json({ message: 'success', newOrder });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
   }
-};
+}
 
 module.exports.getUserOrders = async (req, res) => {
   try {
