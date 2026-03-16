@@ -1,33 +1,50 @@
-const express=require("express");
-const router=express.Router();
+const express = require("express");
+const router = express.Router();
+const { ClerkExpressRequireAuth } = require("@clerk/clerk-sdk-node");
 
-const middleware=require("./../middleware/middleware.js")
-const {register,login,logout,
-    user_menu,
-    user_item,
-    item_category,
-    user_cusine,
-    place_orders,
-    getUserOrders,
-    delete_order,
-    razorpayCreateOrder,
-    verifyPayment
-}=require("./../controllers/user_logic");
-router.post("/register",register)
-router.post("/login",login)
-router.get("/logout",logout)
-router.get("/menu",middleware,user_menu)
-router.get("/menu/:item",middleware,user_item)
-router.get("/list/:item_type",middleware,item_category)
-router.get("/cusine/:cusine",middleware,user_cusine)
-router.post("/place/orders",middleware,place_orders)
-router.get("/orders/:userId",middleware,getUserOrders)
-router.delete("/orders/:orderId",middleware,delete_order)
+const {
+  register,
+  login,
+  logout,
+  user_menu,
+  user_item,
+  item_category,
+  user_cusine,
+  place_orders,
+  getUserOrders,
+  delete_order,
+  razorpayCreateOrder,
+  verifyPayment
+} = require("./../controllers/user_logic");
+
+// AUTH
+router.post("/register", ClerkExpressRequireAuth(), register);
+router.post("/login", ClerkExpressRequireAuth(), login);
+router.get("/logout", logout);
+
+// MENU
+router.get("/menu", ClerkExpressRequireAuth(), user_menu);
+router.get("/menu/:item", ClerkExpressRequireAuth(), user_item);
+router.get("/list/:item_type", ClerkExpressRequireAuth(), item_category);
+router.get("/cusine/:cusine", ClerkExpressRequireAuth(), user_cusine);
+
+// ORDERS
+router.post("/place/orders", ClerkExpressRequireAuth(), place_orders);
+router.get("/orders/:userId", ClerkExpressRequireAuth(), getUserOrders);
+router.delete("/orders/:orderId", ClerkExpressRequireAuth(), delete_order);
+
+// RAZORPAY
+router.post("/razorpay/order", ClerkExpressRequireAuth(), razorpayCreateOrder);
+router.post("/razorpay/verify", ClerkExpressRequireAuth(), verifyPayment);
 
 
-//  razorpay route
+router.get("/test", ClerkExpressRequireAuth(), (req, res) => {
+  console.log("user Details",req.auth);
 
-router.post("/razorpay/order",middleware, razorpayCreateOrder)
-router.post("/razorpay/verify", verifyPayment);
+  res.json({
+    message: "Authenticated",
+    userId: req.auth.userId
+  });
+});
 
-module.exports=router;
+module.exports = router;

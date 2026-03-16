@@ -1,5 +1,7 @@
 const mongoose=require("mongoose")
 const user_reg=new mongoose.Schema({
+
+     clerkId: { type: String, required: true, unique: true },
     name:{
         type:String,
         required:true
@@ -8,10 +10,10 @@ const user_reg=new mongoose.Schema({
         type:String,
         required:true
     },
-    password:{
-        type:String,
-        required:true
-    }
+    // password:{
+    //     type:String,
+    //     required:true
+    // }
 
 })
  const user_registration_model=mongoose.model("users",user_reg);

@@ -9,96 +9,83 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const razorpay = require("razorpay");
 const crypto = require("crypto");
+const { clerkClient } = require("@clerk/clerk-sdk-node");
 
 app.use(express.json());
 
 
+
 module.exports.register = async (req, res) => {
+
   try {
-    const { name, email, password } = req.body;
 
-    // Check if fields are provided
-    if (!name || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+    const clerkId = req.auth.userId;
+
+    const existingUser = await user_registration_model.findOne({ clerkId });
+
+    if (existingUser) {
+      return res.json({
+        message: "User already exists",
+        user: existingUser
+      });
     }
 
-    // Check if  the user already exists
-    let user = await user_registration_model.findOne({ email: email });
-    if (user) {
-      return res.status(409).json({ message: "User Already Registered!" });
-    }
+    // get user details from clerk
+    const clerkUser = await clerkClient.users.getUser(clerkId);
 
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
-
-    // Create and save user
-    const newUser = new user_registration_model({
-      name,
-      email,
-      password: hash
+    const newUser = await user_registration_model.create({
+      clerkId: clerkId,
+      name: clerkUser.firstName || "",
+      email: clerkUser.emailAddresses[0].emailAddress
     });
 
-    await newUser.save();
-
-    return res.status(201).json({ message: 'User Registered Successfully' });
+    res.json({
+      message: "User saved in database",
+      user: newUser
+    });
 
   } catch (err) {
-    console.error("User Registration Error:", err);
-    return res.status(500).json({ message: "User Registration Error", error: err.message });
+
+    console.error(err);
+
+    res.status(500).json({
+      message: "Server error",
+      error: err.message
+    });
+
   }
 };
-
 
 module.exports.login = async (req, res) => {
 
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.json({ message: "Feild is Required" })
-    }
 
-    const user = await user_registration_model.findOne({ email: email })
+    const clerkId = req.auth.userId;
+
+    const user = await user_registration_model.findOne({ clerkId });
+
     if (!user) {
-      return res.json({ message: "Please Register!" })
-    }
-    const result = await bcrypt.compare(password, user.password)
-    if (result) {
-      const token = jwt.sign({ email: user.email }, process.env.SECRET_KEY, { expiresIn: "1h" })
-
-
-      // res.cookie("token",token)
-      console.log("Login Successfull")
-      // res.send("Your Login Successfull")
-      // console.log(user)
-      res.json({
-        token, user: {
-          _id: user._id,
-          name: user.name,
-          email: user.email
-        }
-      })
-
-
-    }
-    else {
-      res.json({ message: "something went wrong!" })
+      return res.status(404).json({
+        message: "User not found"
+      });
     }
 
-
-
+    res.json({
+      message: "Login successful",
+      user
+    });
 
   } catch (err) {
-    console.log("something went wrong", err)
-    res.json({
-      message: "Something went wrong",
-      error: err
+
+    console.error(err);
+
+    res.status(500).json({
+      message: "Server error"
     });
 
   }
+};
 
-
-}
 
 module.exports.logout = (req, res, next) => {
   res.cookie("token", "")
@@ -171,52 +158,52 @@ module.exports.user_cusine = async (req, res) => {
   }
 
 }
-module.exports.place_orders = async (req, res) => {
-  // routes/orders.js
+// module.exports.place_orders = async (req, res) => {
+//   // routes/orders.js
 
 
-  try {
-    const { userId, items, totalAmount } = req.body;
+//   try {
+//     const { userId, items, totalAmount } = req.body;
    
 
-    // Optional: recompute to be safe
-    const verifiedTotal = items.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+//     // Optional: recompute to be safe
+//     const verifiedTotal = items.reduce(
+//       (sum, item) => sum + item.price * item.quantity,
+//       0
+//     );
 
-    if (verifiedTotal !== totalAmount)
-      return res.status(400).json({ message: "Invalid total" });
+//     if (verifiedTotal !== totalAmount)
+//       return res.status(400).json({ message: "Invalid total" });
 
-    const newOrder = await order.create({
-      userId,
-      items,
-      totalAmount: verifiedTotal,
-    });
+//     const newOrder = await order.create({
+//       userId,
+//       items,
+//       totalAmount: verifiedTotal,
+//     });
 
-    res.status(201).json({ message: 'success', newOrder });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Server error" });
-  }
-}
+//     res.status(201).json({ message: 'success', newOrder });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: "Server error" });
+//   }
+// }
 
-module.exports.getUserOrders = async (req, res) => {
-  try {
-    const { userId } = req.params;
+// module.exports.getUserOrders = async (req, res) => {
+//   try {
+//     const { userId } = req.params;
 
-    const orders = await order.find({ userId }).sort({ createdAt: -1 })
-        .populate("items._id");
+//     const orders = await order.find({ userId }).sort({ createdAt: -1 })
+//         .populate("items._id");
 
-    res.json({
-      success: true,
-      orders,
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ message: "Failed to fetch orders" });
-  }
-};
+//     res.json({
+//       success: true,
+//       orders,
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).json({ message: "Failed to fetch orders" });
+//   }
+// };
 
 
 // DELETE /user/orders/:orderId
@@ -232,8 +219,45 @@ module.exports.delete_order = async (req, res) => {
 };
 
 
+module.exports.getUserOrders = async (req, res) => {
+  try {
+    // Get userId from Clerk (trusted)
+    const userId = req.auth.userId;
+
+    const orders = await order
+      .find({ userId })
+      .sort({ createdAt: -1 })
+      .populate("items._id");
+
+    res.json({
+      success: true,
+      orders,
+    });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Failed to fetch orders" });
+  }
+};
 
 
+module.exports.place_orders = async (req, res) => {
+  try {
+    const userId = req.auth.userId; // Safe & Verified
+
+    const { items, totalAmount } = req.body;
+
+    const newOrder = await order.create({
+      userId,
+      items,
+      totalAmount,
+    });
+
+    res.json({ success: true, newOrder });
+  } catch (error) {
+    res.status(500).json({ message: "Error" });
+  }
+};
 
 
 const razorpayInstance = () => {   // Now razorpay is an instance of Razorpay SDK
@@ -247,7 +271,10 @@ module.exports.razorpayCreateOrder = async (req, res) => {
   try {
     const { amount } = req.body;
 
+   
+
     const options = {
+    
       amount: amount * 100,
       currency: "INR",
       receipt: "receipt_" + Date.now(),
